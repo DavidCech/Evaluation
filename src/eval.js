@@ -38,7 +38,7 @@ keys.addEventListener("click", event => {
 //Metoda, která kontroluje, zda je parametr číslem.
 function jeCislo(n) {
   var cisla = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  for (var x = 0; x < 10; x++) {
+  for (var x = 0; x < cisla.length; x++) {
     if (n == cisla[x]) {
       return true;
     }
@@ -49,7 +49,7 @@ function jeCislo(n) {
 //Metoda, která kontroluje, zda je parametr znaménkem.
 function jeZnamenko(n) {
   var znamenka = ["-", "+", "*", "/"];
-  for (var x = 0; x < 10; x++) {
+  for (var x = 0; x < znamenka.length; x++) {
     if (n == znamenka[x]) {
       return true;
     }
