@@ -1,12 +1,13 @@
 const keys = document.getElementById("print");
+var jeVyrazValidni = true;
 
 keys.addEventListener("click", event => {
   var input = document.getElementById("input-field").value;
-  var mezivypocet = 0;
   var pocitadlo = 0;
   var cisla = [];
   var znamenka = [];
 
+  //Rozděluji čísla a znaménka do dvou polí, kontroluji, zda je výraz zadaný správně
   for (var x = 0; x < input.length; x++) {
     if (jeZnamenko(input.charAt(x)) && x != input.length - 1 && x != 0) {
       znamenka = [...znamenka, input.charAt(x)];
@@ -24,12 +25,57 @@ keys.addEventListener("click", event => {
       cisla = [...cisla, parseInt(promenna)];
       pocitadlo = 0;
     } else {
-      mezivypocet =
-        "Špatně zadaný výraz, bereme pouze čísla a základní operace";
-      break;
+      document.getElementById("output-field").value =
+        "Špatně zadaný výraz, bereme pouze přirozená čísla, základní operace a to bez závorek";
+      jeVyrazValidni = false;
     }
   }
 
+  //Vypisuji výsledek do pole.
+  document.getElementById("output-field").value = vycisli(cisla, znamenka);
+});
+
+//Metoda, která kontroluje, zda je parametr číslem.
+function jeCislo(n) {
+  var cisla = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+  for (var x = 0; x < 10; x++) {
+    if (n == cisla[x]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//Metoda, která kontroluje, zda je parametr znaménkem.
+function jeZnamenko(n) {
+  var znamenka = ["-", "+", "*", "/"];
+  for (var x = 0; x < 10; x++) {
+    if (n == znamenka[x]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//Metoda, která provádí matematické operace a kontroluje dělení 0.
+function pocitej(n, m, operator) {
+  if (operator == "+") {
+    return parseInt(n) + parseInt(m);
+  } else if (operator == "-") {
+    return parseInt(n) - parseInt(m);
+  } else if (operator == "*") {
+    return parseInt(n) * parseInt(m);
+  } else if (operator == "/" && m != 0) {
+    return parseInt(n) / parseInt(m);
+  } else {
+    jeVyrazValidni = false;
+  }
+}
+
+/*V této metodě neelegantně vyčísluji výraz, nejprve dělení a násobení, jelikož má
+ větší prioritu, poté sčítání a odčítání. Nakonec vracím buď hodnotu výrazu, nebo kárám
+ uživatele za přestupek.*/
+function vycisli(cisla, znamenka) {
   for (var x = 0; x < znamenka.length; x++) {
     if (znamenka[x] == "*" || znamenka[x] == "/") {
       cisla[x] = pocitej(cisla[x], cisla[x + 1], znamenka[x]);
@@ -47,37 +93,10 @@ keys.addEventListener("click", event => {
       x = x - 1;
     }
   }
-  document.getElementById("output-field").value = cisla[0];
-});
-
-function jeCislo(n) {
-  var cisla = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-  for (var x = 0; x < 10; x++) {
-    if (n == cisla[x]) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function jeZnamenko(n) {
-  var znamenka = ["-", "+", "*", "/"];
-  for (var x = 0; x < 10; x++) {
-    if (n == znamenka[x]) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function pocitej(n, m, operator) {
-  if (operator == "+") {
-    return parseInt(n) + parseInt(m);
-  } else if (operator == "-") {
-    return parseInt(n) - parseInt(m);
-  } else if (operator == "*") {
-    return parseInt(n) * parseInt(m);
-  } else if (operator == "/") {
-    return parseInt(n) / parseInt(m);
+  if (jeVyrazValidni) {
+    return cisla[0];
+  } else {
+    jeVyrazValidni = true;
+    return "Nulou se snad nedělí ani na VŠE :)";
   }
 }
