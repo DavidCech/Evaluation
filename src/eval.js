@@ -9,7 +9,12 @@ keys.addEventListener("click", event => {
 
   //Rozděluji čísla a znaménka do dvou polí, kontroluji, zda je výraz zadaný správně
   for (var x = 0; x < input.length; x++) {
-    if (jeZnamenko(input.charAt(x)) && x != input.length - 1 && x != 0) {
+    if (
+      jeZnamenko(input.charAt(x)) &&
+      x != input.length - 1 &&
+      x != 0 &&
+      !jeZnamenko(input.charAt(x - 1))
+    ) {
       znamenka = [...znamenka, input.charAt(x)];
     } else if (jeCislo(parseInt(input.charAt(x)))) {
       var promenna = "";
@@ -97,6 +102,6 @@ function vycisli(cisla, znamenka) {
     return cisla[0];
   } else {
     jeVyrazValidni = true;
-    return "Nulou se snad nedělí ani na VŠE :)";
+    return "Špatně zadaný výraz";
   }
 }
